@@ -1,0 +1,31 @@
+
+
+{
+  "name": "Borrow It",
+  "manifest_version": 2,
+  "version": "1.1",
+  "description": "An app to connect you to academic libraries.",
+  
+ 
+    "icons": {
+    "48": "icon.png"
+  },
+  
+  "browser_action": 
+  {
+    "default_icon": "icon.png",
+    "default_title": "Borrow It",        
+    "default_popup": "pop_up.html"   
+  },
+  "content_scripts": [
+		{
+ 	 	"matches": ["*://*/*"],
+ 	 	"js": ["find-it.js"],	
+	 	"css": ["borrow-style.css"]
+		}
+	],
+"permissions": ["activeTab"]
+
+	
+
+}
