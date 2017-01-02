@@ -5,14 +5,14 @@ Function 2: turn into string and put into list. Put '+' symbols in-between.
 Function 3: select library URL structure based on user input (not in scope) insert string from function 2 in 
 Function 4: getURL
 
-Function a: look for ISBN 10s (or just 10 digit numbers) on the page 
-Function b: turn ISBN HTML text into www link (a al function Function 4)
 */
 
-//localStorage.setItem("bar", foo);
+
 var myBookSearch;
+var myTextSearch;
 var uniName;
 var standardInject=1
+var cutWords;
 
 function optionsOpen(){
 chrome.runtime.openOptionsPage()
@@ -56,7 +56,7 @@ else if (pageHost=="bookshop.blackwell.co.uk"){
 
 // find author
 	var bookAuthor=document.getElementsByClassName(authorID)[0];
-	console.log("got author!");
+	// console.log("got author!");
 	if (bookAuthor!=null){
 		bookAuthor = bookAuthor.textContent || bookAuthor.innerText;
 		bookAuthor = bookAuthor.trim();
@@ -91,7 +91,57 @@ else if (pageHost=="www.waterstones.com"){
 }
 
 
-      
+
+function findSearchTerm(){
+
+//1. selected text identified
+//2. selected text turned into button
+//3. unselect text and button goes away
+
+
+	       var selectedText = window.getSelection().toString();//1
+	       var textCount = selectedText.length;//1
+    	    if (textCount>0){				//if something is selected...
+
+	    		cutWords = selectedText;
+
+	    		formaText = selectedText.replace('\'','').split(' ').join('+'); //function 2: make into a search term...
+	    		  	chrome.storage.sync.get("uni", function(items) {
+    		if (!chrome.runtime.error) {
+
+    		if(items.uni){
+      			var uniID = items.uni;
+      			myTextSearch = uniList[uniID].stringDesign1;
+      			myTextSearch= myTextSearch + formaText;
+      			console.log("==" + myTextSearch + "==");	//DEBUG
+			}
+		}
+		else {var myTextSearch="no-search-term-DEBUG";
+			console.log("==" + myTextSearch + "==");	//DEBUG
+		}
+		$("p:contains('" + selectedText + "')").text(function () {
+			    	str = this.innerHTML;
+			    	res = str.replace(selectedText, "<a href= '" + myTextSearch + "'>" + cutWords + "</a>");
+			    	this.innerHTML = res;
+				});
+	});
+			
+    		
+    		} //textCount conditional close
+    		
+
+}
+  
+  //listens for selection...
+  $(document).ready(function(){
+
+	    
+		$( "p" ).on( "click", function() {
+		findSearchTerm();
+
+		});
+		});//end doc ready function
+
 
   var extractBook =  bookTitle + " " + bookAuthor; //Function 1
 	var myBookTerm =extractBook.replace(/ *\([^)]*\) */g, " ");//gets rid of bracketed title content from search
@@ -99,6 +149,7 @@ else if (pageHost=="www.waterstones.com"){
  
 
   chrome.storage.sync.get("uni", function(items) {
+
     if (!chrome.runtime.error) {
     	if(items.uni){
       var uniID = items.uni;
