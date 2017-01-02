@@ -1,0 +1,36 @@
+#borrow-it{
+font-size:14px;
+background:white;
+padding:8px;
+color:#999;
+font-weight: 300;
+border: #666 1px solid;
+border-bottom: #444 2px solid;;
+line-height:2;
+margin:5px 0 5px 0;
+display:inline-block;
+ 
+}
+
+.main-text{
+color:#cd027d;
+font-weight:600;
+
+}
+
+.main-text:hover{
+color:gray!important;
+font-weight:600;
+text-decoration:underline;
+}
+
+.popBut{
+	width: 100%;
+}
+
+
+.major{
+	background-color: f81714;
+	color: white;
+}
+
